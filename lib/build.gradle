@@ -32,3 +32,32 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
+
+android{
+    buildTypes.all {
+        def buildType = it.name.substring(0, 1).toUpperCase() + it.name.substring(1)
+
+        task ("copy${buildType}JniLibs", type: Copy) {
+            dependsOn "transformNativeLibsWithSyncJniLibsForDebug"
+
+            from "${buildDir}/intermediates/library_and_local_jars_jni/${buildType.toLowerCase()}/armeabi-v7a"
+            into "${buildDir}/intermediates/library_and_local_jars_jni/${buildType.toLowerCase()}/armeabi"
+        }
+    }
+}
+
+afterEvaluate {
+    android{
+        buildTypes.all {
+            def buildType = it.name.substring(0, 1).toUpperCase() + it.name.substring(1)
+
+            def copyJniLibsTask = tasks.getByName("copy${buildType}JniLibs")
+
+            // 防止so文件生成后被删除
+            copyJniLibsTask.mustRunAfter "transformNativeLibsWithSyncJniLibsFor${buildType}"
+
+            // 不能用assembleRelease，使用时没有依赖task assembleRelease
+            tasks.getByName("bundle${buildType}").dependsOn copyJniLibsTask
+        }
+    }
+}
