@@ -101,7 +101,7 @@ std::shared_ptr<_jobject> JniUtils::GetObjectSafely(JNIEnv* env, jclass class_in
     }
 
     va_start(args, constructor);
-    auto creater = [=]() -> jobject {
+    auto creater = [&]() -> jobject {
         ENSURE_RUNON_THREAD(thread_id);
         jobject obj = env->NewObjectV(class_instance, constructor, args);
 //        Log::D(JniUtils::TAG, "GetObjectSafely creater(), env=%p this=%p", env, obj);

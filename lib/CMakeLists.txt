@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 3.4.1)
 
-add_library( Elastos.Wallet.Lib.Jni SHARED
+add_library( Elastos.Wallet.Lib SHARED
              src/main/cpp/Log.cpp
              src/main/cpp/JniUtils.cpp
              src/main/cpp/ElastosWalletLibJni.cpp )
 
+file(GLOB Elastos.ORG.Wallet.Lib.C-Libraries "${PROJECT_SOURCE_DIR}/build/tmp/Elastos.ORG.Wallet.Lib.C/jni/${ANDROID_ABI}/*")
+file(GLOB Elastos.ORG.Wallet.Lib.C-HeaderDir "${PROJECT_SOURCE_DIR}/build/tmp/Elastos.ORG.Wallet.Lib.C/jni/include")
+target_include_directories( Elastos.Wallet.Lib PRIVATE "${Elastos.ORG.Wallet.Lib.C-HeaderDir}" )
+target_link_libraries( Elastos.Wallet.Lib "${Elastos.ORG.Wallet.Lib.C-Libraries}" )
+
+
 find_library( log-lib log )
-
-target_link_libraries( Elastos.Wallet.Lib.Jni ${log-lib} )
-
-include_directories ( Elastos.Wallet.Lib.Jni "${PROJECT_SOURCE_DIR}/src/main/jniLibs/include" )
-target_link_libraries(Elastos.Wallet.Lib.Jni "${PROJECT_SOURCE_DIR}/src/main/jniLibs/armeabi-v7a/libElastos.Wallet.Utility.so" )
+target_link_libraries( Elastos.Wallet.Lib ${log-lib} )
