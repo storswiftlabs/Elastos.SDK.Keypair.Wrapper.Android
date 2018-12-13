@@ -1,6 +1,6 @@
 package org.elastos.wallet.lib;
 
-public final class ElastosWalletHD {
+public final class ElastosWalletHD extends NativeBridge {
     private ElastosWalletHD() {}
 
     /**

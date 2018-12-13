@@ -1,11 +1,7 @@
 package org.elastos.wallet.lib;
 
-public final class ElastosWallet {
+public final class ElastosWallet extends NativeBridge {
     private ElastosWallet() {}
-
-    static {
-        System.loadLibrary("Elastos.Wallet.Lib.Jni");
-    }
 
     public static class Data {
         public byte[] buf;

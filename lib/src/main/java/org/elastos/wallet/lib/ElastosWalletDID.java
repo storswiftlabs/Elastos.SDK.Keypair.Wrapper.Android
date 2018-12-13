@@ -1,6 +1,6 @@
 package org.elastos.wallet.lib;
 
-public final class ElastosWalletDID {
+public final class ElastosWalletDID extends NativeBridge {
     private ElastosWalletDID() {}
 
 // Apis for DID
