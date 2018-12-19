@@ -44,7 +44,7 @@ public:
   static uint64_t MicroNow();
   static uint64_t NanoNow();
 
-  static constexpr const char *TAG = "JSI";
+  static constexpr const char *TAG = "ElastosWallet";
 
   /*** class function and variable ***/
 
