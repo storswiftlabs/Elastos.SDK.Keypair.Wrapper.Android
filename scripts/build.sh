@@ -9,14 +9,17 @@ BUILD_DIR="$PROJECT_DIR/build";
 
 PROJECT_NAME="ElastosOrgWalletLib";
 PROJECT_BUILDTYPE="Release";
+PROJECT_REVISION="$(git rev-list --count HEAD)";
+PROJECT_VERSION="v0.1.$PROJECT_REVISION";
 
-TARGET_PATH="$BUILD_DIR/${PROJECT_NAME}.aar";
+TARGET_PATH="$BUILD_DIR/${PROJECT_NAME}-${PROJECT_VERSION}.aar";
 
 cd "$PROJECT_DIR";
 ./gradlew :lib:assembleDebug
 rm -rf "$TARGET_PATH/";
 mkdir -p "$BUILD_DIR/";
 cp "$PROJECT_DIR/lib/build/outputs/aar/lib-debug.aar" "$TARGET_PATH";
+git tag --force ${PROJECT_VERSION}
 
 echo "Done!!!";
 

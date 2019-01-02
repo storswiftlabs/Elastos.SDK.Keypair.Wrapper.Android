@@ -37,6 +37,11 @@ clean {
     delete '.externalNativeBuild'
 }
 
+task buildDepends(type: Exec) {
+    commandLine 'bash', '-c', "export ANDROID_NDK_HOME=${android.ndkDirectory}; ${rootProject.projectDir}/scripts/build-depends.sh"
+}
+preBuild.dependsOn buildDepends
+
 project.ext {
     extractNativeRunBefore = [ 'externalNativeBuild${buildType}' ]
     extractNativeRunAfter = null
