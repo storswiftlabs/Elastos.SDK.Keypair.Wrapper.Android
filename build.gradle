@@ -25,3 +25,16 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    minSdkVersion = 19
+    targetSdkVersion = 27
+    compileSdkVersion = 27
+
+    versionCode = this.properties['versionCode'] ?: 9999
+    versionCode = versionCode as Integer
+    versionName = this.properties['versionName'] ?: '0.0.9999'
+
+    println "versionCode = $rootProject.ext.versionCode"
+    println "versionName = $rootProject.ext.versionName"
+}

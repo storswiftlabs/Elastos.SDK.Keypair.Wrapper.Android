@@ -15,8 +15,8 @@ PROJECT_VERSION="v0.1.$PROJECT_REVISION";
 TARGET_PATH="$BUILD_DIR/${PROJECT_NAME}-${PROJECT_VERSION}.aar";
 
 cd "$PROJECT_DIR";
-./gradlew :lib:assembleDebug
-rm -rf "$TARGET_PATH/";
+./gradlew :lib:assembleDebug -P versionCode=${PROJECT_REVISION} -P versionName=${PROJECT_VERSION/v/}
+rm -rf "$TARGET_PATH";
 mkdir -p "$BUILD_DIR/";
 cp "$PROJECT_DIR/lib/build/outputs/aar/lib-debug.aar" "$TARGET_PATH";
 git tag --force ${PROJECT_VERSION}
