@@ -1,7 +1,7 @@
-package org.elastos.wallet.lib;
+package org.elastos.sdk.keypair;
 
-public final class ElastosWallet extends NativeBridge {
-    private ElastosWallet() {}
+public final class ElastosKeypair extends NativeBridge {
+    private ElastosKeypair() {}
 
     public static class Data {
         public byte[] buf;

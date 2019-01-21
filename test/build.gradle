@@ -8,7 +8,7 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "org.elastos.wallet.lib.test"
+        applicationId "org.elastos.sdk.keypair.test"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 

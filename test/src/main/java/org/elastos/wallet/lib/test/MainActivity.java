@@ -1,14 +1,14 @@
-package org.elastos.wallet.lib.test;
+package org.elastos.sdk.keypair.test;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import org.elastos.wallet.lib.ElastosWallet;
-import org.elastos.wallet.lib.ElastosWalletDID;
-import org.elastos.wallet.lib.ElastosWalletHD;
-import org.elastos.wallet.lib.ElastosWalletSign;
+import org.elastos.sdk.keypair.ElastosWallet;
+import org.elastos.sdk.keypair.ElastosWalletDID;
+import org.elastos.sdk.keypair.ElastosWalletHD;
+import org.elastos.sdk.keypair.ElastosWalletSign;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";

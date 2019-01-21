@@ -11,9 +11,9 @@ git -C "$PROJECT_DIR" submodule init;
 git -C "$PROJECT_DIR" submodule update;
 
 export PACKAGE_PLATFORM=Android;
-"$DEPENDS_DIR/Elastos.ORG.Wallet.Lib.C/scripts/package-mobile.sh";
+"$DEPENDS_DIR/Elastos.SDK.Keypair.C/scripts/package-mobile.sh";
 
-rm -rf "$PROJECT_DIR/lib/libs/Elastos.ORG.Wallet.Lib.C.aar";
+rm -rf "$PROJECT_DIR/lib/libs/Elastos.SDK.Keypair.C.aar";
 mkdir -p "$PROJECT_DIR/lib/libs/";
 
-cp -rv "$DEPENDS_DIR/Elastos.ORG.Wallet.Lib.C/build/package/Elastos.ORG.Wallet.Lib.C.aar" "$PROJECT_DIR/lib/libs/";
+cp -rv "$DEPENDS_DIR/Elastos.SDK.Keypair.C/build/package/Elastos.SDK.Keypair.C.aar" "$PROJECT_DIR/lib/libs/";

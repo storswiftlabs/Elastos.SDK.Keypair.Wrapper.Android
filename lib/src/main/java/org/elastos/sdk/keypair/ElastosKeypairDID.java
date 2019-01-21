@@ -1,7 +1,7 @@
-package org.elastos.wallet.lib;
+package org.elastos.sdk.keypair;
 
-public final class ElastosWalletDID extends NativeBridge {
-    private ElastosWalletDID() {}
+public final class ElastosKeypairDID extends NativeBridge {
+    private ElastosKeypairDID() {}
 
 // Apis for DID
     /**
@@ -16,7 +16,7 @@ public final class ElastosWalletDID extends NativeBridge {
      * @return
      *      the master public key if succeeded, or nullptr if failed.
      */
-    public static native ElastosWallet.Data getIdChainMasterPublicKey(ElastosWallet.Data seed, int seedLen);
+    public static native ElastosKeypair.Data getIdChainMasterPublicKey(ElastosKeypair.Data seed, int seedLen);
 
     /**
      * \~English
@@ -34,7 +34,7 @@ public final class ElastosWalletDID extends NativeBridge {
      * @return
      *      the sub private key if succeeded, or nullptr if failed.
      */
-    public static native String generateIdChainSubPrivateKey(ElastosWallet.Data seed, int seedLen, int purpose, int index);
+    public static native String generateIdChainSubPrivateKey(ElastosKeypair.Data seed, int seedLen, int purpose, int index);
 
     /**
      * \~English
@@ -50,7 +50,7 @@ public final class ElastosWalletDID extends NativeBridge {
      * @return
      *      the sub public key if succeeded, or nullptr if failed.
      */
-    public static native String generateIdChainSubPublicKey(ElastosWallet.Data idMasterPublicKey, int purpose, int index);
+    public static native String generateIdChainSubPublicKey(ElastosKeypair.Data idMasterPublicKey, int purpose, int index);
 
     /**
      * \~English

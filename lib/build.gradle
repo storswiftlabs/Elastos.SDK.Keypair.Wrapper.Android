@@ -46,7 +46,7 @@ preBuild.dependsOn buildDepends
 project.ext {
     extractNativeRunBefore = [ 'externalNativeBuild${buildType}' ]
     extractNativeRunAfter = null
-    extractNativeMap = [ "Elastos.ORG.Wallet.Lib.C" : "$projectDir/libs/Elastos.ORG.Wallet.Lib.C.aar" ]
+    extractNativeMap = [ "Elastos.SDK.Keypair.C" : "$projectDir/libs/Elastos.SDK.Keypair.C.aar" ]
 }
 apply from: "$projectDir/task-extract-native.gradle"
 

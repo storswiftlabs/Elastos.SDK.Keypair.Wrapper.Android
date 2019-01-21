@@ -1,7 +1,7 @@
-package org.elastos.wallet.lib;
+package org.elastos.sdk.keypair;
 
-public final class ElastosWalletSign extends NativeBridge {
-    private ElastosWalletSign() {}
+public final class ElastosKeypairSign extends NativeBridge {
+    private ElastosKeypairSign() {}
 
     /**
      * \~English

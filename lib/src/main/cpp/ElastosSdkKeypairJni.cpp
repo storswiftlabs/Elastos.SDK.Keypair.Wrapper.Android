@@ -5,11 +5,11 @@
 
 #include "JniUtils.hpp"
 
-static const char* JavaClassName_ElastosWallet_Data = "org/elastos/wallet/lib/ElastosWallet$Data";
+static const char* JavaClassName_ElastosKeypair_Data = "org/elastos/sdk/keypair/ElastosKeypair$Data";
 
 static jobject NewData(JNIEnv *jEnv)
 {
-    jclass jClass_Data = JniUtils::GetJavaClass(jEnv, JavaClassName_ElastosWallet_Data);
+    jclass jClass_Data = JniUtils::GetJavaClass(jEnv, JavaClassName_ElastosKeypair_Data);
     jmethodID jMethod_DataConstructor = jEnv->GetMethodID(jClass_Data, "<init>", "()V");
     jobject jData = jEnv->NewObject(jClass_Data, jMethod_DataConstructor);
 
@@ -20,7 +20,7 @@ static void SetDataBuffer(JNIEnv *jEnv, jobject jData, int8_t *buf, int size)
 {
     auto jBuf = JniUtils::GetByteArraySafely(jEnv, buf, size);
 
-    jclass jClass_Data = JniUtils::GetJavaClass(jEnv, JavaClassName_ElastosWallet_Data);
+    jclass jClass_Data = JniUtils::GetJavaClass(jEnv, JavaClassName_ElastosKeypair_Data);
     jfieldID jField_DataBuf = jEnv->GetFieldID(jClass_Data, "buf", JniUtils::JavaClassNameByteArray);
     jEnv->SetObjectField(jData, jField_DataBuf, jBuf.get());
 
@@ -29,7 +29,7 @@ static void SetDataBuffer(JNIEnv *jEnv, jobject jData, int8_t *buf, int size)
 
 static std::shared_ptr<int8_t> GetDataBuffer(JNIEnv *jEnv, jobject data)
 {
-    jclass jClass_Data = JniUtils::GetJavaClass(jEnv, JavaClassName_ElastosWallet_Data);
+    jclass jClass_Data = JniUtils::GetJavaClass(jEnv, JavaClassName_ElastosKeypair_Data);
     jfieldID jField_DataBuf = jEnv->GetFieldID(jClass_Data, "buf", JniUtils::JavaClassNameByteArray);
     jobject jObject_DataBuf = jEnv->GetObjectField(data, jField_DataBuf);
 
@@ -40,7 +40,7 @@ static std::shared_ptr<int8_t> GetDataBuffer(JNIEnv *jEnv, jobject data)
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWallet_generateMnemonic(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypair_generateMnemonic(JNIEnv *jEnv, jclass jType,
                                                            jstring jLanguage, jstring jWords)
 {
 
@@ -60,7 +60,7 @@ Java_org_elastos_wallet_lib_ElastosWallet_generateMnemonic(JNIEnv *jEnv, jclass 
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_org_elastos_wallet_lib_ElastosWallet_getSeedFromMnemonic(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypair_getSeedFromMnemonic(JNIEnv *jEnv, jclass jType,
                                                               jobject jSeed, jstring jMnemonic,
                                                               jstring jLanguage, jstring jWords,
                                                               jstring jMnemonicPassword) {
@@ -83,7 +83,7 @@ Java_org_elastos_wallet_lib_ElastosWallet_getSeedFromMnemonic(JNIEnv *jEnv, jcla
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWallet_getSinglePrivateKey(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypair_getSinglePrivateKey(JNIEnv *jEnv, jclass jType,
                                                               jobject jSeed, jint jSeedLen) {
 
     auto seed = GetDataBuffer(jEnv, jSeed);
@@ -102,7 +102,7 @@ Java_org_elastos_wallet_lib_ElastosWallet_getSinglePrivateKey(JNIEnv *jEnv, jcla
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWallet_getSinglePublicKey(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypair_getSinglePublicKey(JNIEnv *jEnv, jclass jType,
                                                              jobject jSeed, jint jSeedLen) {
 
     auto seed = GetDataBuffer(jEnv, jSeed);
@@ -121,7 +121,7 @@ Java_org_elastos_wallet_lib_ElastosWallet_getSinglePublicKey(JNIEnv *jEnv, jclas
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWallet_getAddress(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypair_getAddress(JNIEnv *jEnv, jclass jType,
                                                      jstring jPublicKey) {
     auto pubKey = JniUtils::GetStringSafely(jEnv, jPublicKey);
 
@@ -138,7 +138,7 @@ Java_org_elastos_wallet_lib_ElastosWallet_getAddress(JNIEnv *jEnv, jclass jType,
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_org_elastos_wallet_lib_ElastosWallet_sign(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypair_sign(JNIEnv *jEnv, jclass jType,
                                                jstring jPrivateKey,
                                                jobject jData, jint jLen, jobject jSignedData)
 {
@@ -160,7 +160,7 @@ Java_org_elastos_wallet_lib_ElastosWallet_sign(JNIEnv *jEnv, jclass jType,
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_org_elastos_wallet_lib_ElastosWallet_verify(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypair_verify(JNIEnv *jEnv, jclass jType,
                                                  jstring jPublicKey,
                                                  jobject jData, jint jLen,
                                                  jobject jSignedData, jint jSignedLen)
@@ -178,7 +178,7 @@ Java_org_elastos_wallet_lib_ElastosWallet_verify(JNIEnv *jEnv, jclass jType,
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_org_elastos_wallet_lib_ElastosWalletHD_getMasterPublicKey(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypairHD_getMasterPublicKey(JNIEnv *jEnv, jclass jType,
                                                                jobject jSeed, jint jSeedLen,
                                                                jint jCoinType) {
     auto seed = GetDataBuffer(jEnv, jSeed);
@@ -198,7 +198,7 @@ Java_org_elastos_wallet_lib_ElastosWalletHD_getMasterPublicKey(JNIEnv *jEnv, jcl
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWalletHD_generateSubPrivateKey(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypairHD_generateSubPrivateKey(JNIEnv *jEnv, jclass jType,
                                                                   jobject jSeed, jint jSeedLen,
                                                                   jint jCoinType, jint jChain,
                                                                   jint jIndex) {
@@ -218,7 +218,7 @@ Java_org_elastos_wallet_lib_ElastosWalletHD_generateSubPrivateKey(JNIEnv *jEnv, 
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWalletHD_generateSubPublicKey(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypairHD_generateSubPublicKey(JNIEnv *jEnv, jclass jType,
                                                                  jobject jMasterPublicKey,
                                                                  jint jChain, jint jIndex) {
     auto masterPublicKey = GetDataBuffer(jEnv, jMasterPublicKey);
@@ -236,7 +236,7 @@ Java_org_elastos_wallet_lib_ElastosWalletHD_generateSubPublicKey(JNIEnv *jEnv, j
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_org_elastos_wallet_lib_ElastosWalletDID_getIdChainMasterPublicKey(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypairDID_getIdChainMasterPublicKey(JNIEnv *jEnv, jclass jType,
                                                                        jobject jSeed,
                                                                        jint jSeedLen) {
     auto seed = GetDataBuffer(jEnv, jSeed);
@@ -255,7 +255,7 @@ Java_org_elastos_wallet_lib_ElastosWalletDID_getIdChainMasterPublicKey(JNIEnv *j
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWalletDID_generateIdChainSubPrivateKey(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypairDID_generateIdChainSubPrivateKey(JNIEnv *jEnv, jclass jType,
                                                                           jobject jSeed, jint jSeedLen,
                                                                           jint jPurpose, jint jIndex) {
     auto seed = GetDataBuffer(jEnv, jSeed);
@@ -273,7 +273,7 @@ Java_org_elastos_wallet_lib_ElastosWalletDID_generateIdChainSubPrivateKey(JNIEnv
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWalletDID_generateIdChainSubPublicKey(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypairDID_generateIdChainSubPublicKey(JNIEnv *jEnv, jclass jType,
                                                                          jobject jIdMasterPublicKey,
                                                                          jint jPurpose, jint jIndex) {
 
@@ -292,7 +292,7 @@ Java_org_elastos_wallet_lib_ElastosWalletDID_generateIdChainSubPublicKey(JNIEnv 
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWalletDID_getDid(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypairDID_getDid(JNIEnv *jEnv, jclass jType,
                                                     jstring jIdPublicKey) {
     auto idPubKey = JniUtils::GetStringSafely(jEnv, jIdPublicKey);
 
@@ -312,7 +312,7 @@ Java_org_elastos_wallet_lib_ElastosWalletDID_getDid(JNIEnv *jEnv, jclass jType,
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWalletSign_generateRawTransaction(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypairSign_generateRawTransaction(JNIEnv *jEnv, jclass jType,
                                                                      jstring jTransaction) {
     auto transaction = JniUtils::GetStringSafely(jEnv, jTransaction);
 
@@ -329,7 +329,7 @@ Java_org_elastos_wallet_lib_ElastosWalletSign_generateRawTransaction(JNIEnv *jEn
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWalletSign_getMultiSignAddress(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypairSign_getMultiSignAddress(JNIEnv *jEnv, jclass jType,
                                                                   jobjectArray jPublicKeys,
                                                                   jint jLength,
                                                                   jint jRequiredSignCount) {
@@ -362,7 +362,7 @@ Java_org_elastos_wallet_lib_ElastosWalletSign_getMultiSignAddress(JNIEnv *jEnv, 
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWalletSign_multiSignTransaction(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypairSign_multiSignTransaction(JNIEnv *jEnv, jclass jType,
                                                                    jstring jPrivateKey,
                                                                    jobjectArray jPublicKeys,
                                                                    jint jLength,
@@ -398,7 +398,7 @@ Java_org_elastos_wallet_lib_ElastosWalletSign_multiSignTransaction(JNIEnv *jEnv,
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_elastos_wallet_lib_ElastosWalletSign_serializeMultiSignTransaction(JNIEnv *jEnv, jclass jType,
+Java_org_elastos_sdk_keypair_ElastosKeypairSign_serializeMultiSignTransaction(JNIEnv *jEnv, jclass jType,
                                                                             jstring jTransaction) {
     auto transaction = JniUtils::GetStringSafely(jEnv, jTransaction);
 
