@@ -66,4 +66,5 @@ fastlane/readme.md
 
 .idea/
 .DS_Store
-lib/libs/Elastos.ORG.Wallet.Lib.C.aar
+lib/libs/Elastos.SDK.Keypair.C.aar
+
