@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import org.elastos.sdk.keypair.ElastosWallet;
-import org.elastos.sdk.keypair.ElastosWalletDID;
-import org.elastos.sdk.keypair.ElastosWalletHD;
-import org.elastos.sdk.keypair.ElastosWalletSign;
+import org.elastos.sdk.keypair.ElastosKeypair;
+import org.elastos.sdk.keypair.ElastosKeypairDID;
+import org.elastos.sdk.keypair.ElastosKeypairHD;
+import org.elastos.sdk.keypair.ElastosKeypairSign;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
         String language = "english";
         String words = "";
 
-        String mnemonic = ElastosWallet.generateMnemonic(language, words);
+        String mnemonic = ElastosKeypair.generateMnemonic(language, words);
         if (mnemonic == null) {
             String errmsg = "Failed to generate mnemonic.";
             Log.e(TAG, errmsg);
@@ -59,8 +59,8 @@ public class MainActivity extends Activity {
         }
         message += "mnemonic: " + mnemonic + "\n";
 
-        mSeed = new ElastosWallet.Data();
-        int ret = ElastosWallet.getSeedFromMnemonic(mSeed, mnemonic, language, words, "0");
+        mSeed = new ElastosKeypair.Data();
+        int ret = ElastosKeypair.getSeedFromMnemonic(mSeed, mnemonic, language, words, "0");
         if (ret <= 0) {
             String errmsg = "Failed to get seed from mnemonic. ret=" + ret + "\n";
             Log.e(TAG, errmsg);
@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
         mSeedLen = ret;
         message += "seed: " + mSeed.buf + ", len: " + mSeedLen + "\n";
 
-        String privateKey = ElastosWallet.getSinglePrivateKey(mSeed, mSeedLen);
+        String privateKey = ElastosKeypair.getSinglePrivateKey(mSeed, mSeedLen);
         if (privateKey == null) {
             String errmsg = "Failed to generate privateKey.\n";
             Log.e(TAG, errmsg);
@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
         }
         message += "privateKey: " + privateKey + "\n";
 
-        String publicKey = ElastosWallet.getSinglePublicKey(mSeed, mSeedLen);
+        String publicKey = ElastosKeypair.getSinglePublicKey(mSeed, mSeedLen);
         if (publicKey == null) {
             String errmsg = "Failed to generate publicKey.\n";
             Log.e(TAG, errmsg);
@@ -90,7 +90,7 @@ public class MainActivity extends Activity {
         }
         message += "publicKey: " + publicKey + "\n";
 
-        String address = ElastosWallet.getAddress(publicKey);
+        String address = ElastosKeypair.getAddress(publicKey);
         if (address == null) {
             String errmsg = "Failed to get address.\n";
             Log.e(TAG, errmsg);
@@ -101,10 +101,10 @@ public class MainActivity extends Activity {
         message += "address: " + address + "\n";
 
 
-        ElastosWallet.Data data = new ElastosWallet.Data();
+        ElastosKeypair.Data data = new ElastosKeypair.Data();
         data.buf = new byte[]{0, 1, 2, 3, 4, 5};
-        ElastosWallet.Data signedData = new ElastosWallet.Data();
-        int signedLen = ElastosWallet.sign(privateKey, data, data.buf.length, signedData);
+        ElastosKeypair.Data signedData = new ElastosKeypair.Data();
+        int signedLen = ElastosKeypair.sign(privateKey, data, data.buf.length, signedData);
         if (signedLen <= 0) {
             String errmsg = "Failed to sign data.\n";
             Log.e(TAG, errmsg);
@@ -113,7 +113,7 @@ public class MainActivity extends Activity {
             return message;
         }
 
-        boolean verified = ElastosWallet.verify(publicKey, data, data.buf.length, signedData, signedLen);
+        boolean verified = ElastosKeypair.verify(publicKey, data, data.buf.length, signedData, signedLen);
         message += "verified: " + verified + "\n";
 
         message += "================================================\n";
@@ -123,7 +123,7 @@ public class MainActivity extends Activity {
     private String testHDWalletAddress() {
         String message = "";
 
-        ElastosWallet.Data masterPublicKey = ElastosWalletHD.getMasterPublicKey(mSeed, mSeedLen, ElastosWalletHD.COIN_TYPE_ELA);
+        ElastosKeypair.Data masterPublicKey = ElastosKeypairHD.getMasterPublicKey(mSeed, mSeedLen, ElastosKeypairHD.COIN_TYPE_ELA);
         if(masterPublicKey == null) {
             String errmsg = "Failed to generate master publicKey.\n";
             Log.e(TAG, errmsg);
@@ -138,9 +138,9 @@ public class MainActivity extends Activity {
         String[] publicKeys = new String[count];
         String[] addresses = new String[count];
         for (int idx = 0; idx < count; idx++) {
-            privateKeys[idx] = ElastosWalletHD.generateSubPrivateKey(mSeed, mSeedLen, ElastosWalletHD.COIN_TYPE_ELA, ElastosWalletHD.INTERNAL_CHAIN, idx);
-            publicKeys[idx] = ElastosWalletHD.generateSubPublicKey(masterPublicKey, ElastosWalletHD.INTERNAL_CHAIN, idx);
-            addresses[idx] = ElastosWallet.getAddress(publicKeys[idx]);
+            privateKeys[idx] = ElastosKeypairHD.generateSubPrivateKey(mSeed, mSeedLen, ElastosKeypairHD.COIN_TYPE_ELA, ElastosKeypairHD.INTERNAL_CHAIN, idx);
+            publicKeys[idx] = ElastosKeypairHD.generateSubPublicKey(masterPublicKey, ElastosKeypairHD.INTERNAL_CHAIN, idx);
+            addresses[idx] = ElastosKeypair.getAddress(publicKeys[idx]);
 
             message += "addresses[" + idx + "]: " + addresses[idx] + "\n";
         }
@@ -152,7 +152,7 @@ public class MainActivity extends Activity {
     private String testDid() {
         String message = "";
 
-        ElastosWallet.Data idChainMasterPublicKey = ElastosWalletDID.getIdChainMasterPublicKey(mSeed, mSeedLen);
+        ElastosKeypair.Data idChainMasterPublicKey = ElastosKeypairDID.getIdChainMasterPublicKey(mSeed, mSeedLen);
         if(idChainMasterPublicKey == null) {
             String errmsg = "Failed to generate id chain master publicKey.\n";
             Log.e(TAG, errmsg);
@@ -167,9 +167,9 @@ public class MainActivity extends Activity {
         String[] publicKeys = new String[count];
         String[] dids = new String[count];
         for (int idx = 0; idx < count; idx++) {
-            privateKeys[idx] = ElastosWalletDID.generateIdChainSubPrivateKey(mSeed, mSeedLen, 0, idx);
-            publicKeys[idx] = ElastosWalletDID.generateIdChainSubPublicKey(idChainMasterPublicKey, 0, idx);
-            dids[idx] = ElastosWalletDID.getDid(publicKeys[idx]);
+            privateKeys[idx] = ElastosKeypairDID.generateIdChainSubPrivateKey(mSeed, mSeedLen, 0, idx);
+            publicKeys[idx] = ElastosKeypairDID.generateIdChainSubPublicKey(idChainMasterPublicKey, 0, idx);
+            dids[idx] = ElastosKeypairDID.getDid(publicKeys[idx]);
 
             message += "dids[" + idx + "]: " + dids[idx] + "\n";
         }
@@ -187,7 +187,7 @@ public class MainActivity extends Activity {
                 + "\"index\":0,\"address\":\"EeniFrrhuFgQXRrQXsiM1V4Amdsk4vfkVc\"}],"
                 + "\"Outputs\":[{\"address\":\"EbxU18T3M9ufnrkRY7NLt6sKyckDW4VAsA\","
                 + "\"amount\":2000000}]}]}";
-        String signedData = ElastosWalletSign.generateRawTransaction(transaction);
+        String signedData = ElastosKeypairSign.generateRawTransaction(transaction);
         if(signedData == null) {
             String errmsg = "Failed to generate raw transaction.\n";
             Log.e(TAG, errmsg);
@@ -220,7 +220,7 @@ public class MainActivity extends Activity {
         String privKey2 = "fe7bb62ad9bed0a572bd9428574eba8d038b68ea3004d37eb7bcf3f297a2c48f";
         String privKey3 = "404a282fec850e7b880ad65f40ffd0bdddc50d8cf3217ca65d30f5378d377991";
 
-        String address = ElastosWalletSign.getMultiSignAddress(publicKeys, 3, 2);
+        String address = ElastosKeypairSign.getMultiSignAddress(publicKeys, 3, 2);
         if(address == null) {
             String errmsg = "Failed to get multi sign address.\n";
             Log.e(TAG, errmsg);
@@ -230,13 +230,13 @@ public class MainActivity extends Activity {
         }
         message += "MultiSignAddress: " + address + "\n";
 
-        String signedData1 = ElastosWalletSign.multiSignTransaction(privKey2, publicKeys, 3, 2, data);
+        String signedData1 = ElastosKeypairSign.multiSignTransaction(privKey2, publicKeys, 3, 2, data);
         message += "signedData1: " + signedData1 + "\n";
 
-        String signedData2 = ElastosWalletSign.multiSignTransaction(privKey3, publicKeys, 3, 2, signedData1);
+        String signedData2 = ElastosKeypairSign.multiSignTransaction(privKey3, publicKeys, 3, 2, signedData1);
         message += "signedData2: " + signedData2 + "\n";
 
-        String serialize = ElastosWalletSign.serializeMultiSignTransaction(signedData2);
+        String serialize = ElastosKeypairSign.serializeMultiSignTransaction(signedData2);
         message += "serialize: " + serialize + "\n";
 
         message += "================================================\n";
@@ -244,6 +244,6 @@ public class MainActivity extends Activity {
     }
 
 
-    private ElastosWallet.Data mSeed;
+    private ElastosKeypair.Data mSeed;
     private int mSeedLen;
 }
