@@ -152,27 +152,9 @@ public class MainActivity extends Activity {
     private String testDid() {
         String message = "";
 
-        ElastosKeypair.Data idChainMasterPublicKey = ElastosKeypairDID.getIdChainMasterPublicKey(mSeed, mSeedLen);
-        if(idChainMasterPublicKey == null) {
-            String errmsg = "Failed to generate id chain master publicKey.\n";
-            Log.e(TAG, errmsg);
-            message += errmsg;
-
-            return message;
-        }
-        message += "idChainMasterPublicKey: " + idChainMasterPublicKey.buf + "\n";
-
-        int count = 10;
-        String[] privateKeys = new String[count];
-        String[] publicKeys = new String[count];
-        String[] dids = new String[count];
-        for (int idx = 0; idx < count; idx++) {
-            privateKeys[idx] = ElastosKeypairDID.generateIdChainSubPrivateKey(mSeed, mSeedLen, 0, idx);
-            publicKeys[idx] = ElastosKeypairDID.generateIdChainSubPublicKey(idChainMasterPublicKey, 0, idx);
-            dids[idx] = ElastosKeypairDID.getDid(publicKeys[idx]);
-
-            message += "dids[" + idx + "]: " + dids[idx] + "\n";
-        }
+        String pubKey = "02bc11aa5c35acda6f6f219b94742dd9a93c1d11c579f98f7e3da05ad910a48306";
+        String did = ElastosKeypairDID.getDid(pubKey);
+            message += "dids: " + did + "\n";
 
         message += "================================================\n";
         return message;

@@ -235,62 +235,6 @@ Java_org_elastos_sdk_keypair_ElastosKeypairHD_generateSubPublicKey(JNIEnv *jEnv,
 }
 
 extern "C"
-JNIEXPORT jobject JNICALL
-Java_org_elastos_sdk_keypair_ElastosKeypairDID_getIdChainMasterPublicKey(JNIEnv *jEnv, jclass jType,
-                                                                       jobject jSeed,
-                                                                       jint jSeedLen) {
-    auto seed = GetDataBuffer(jEnv, jSeed);
-    int seedLen = jSeedLen;
-
-    MasterPublicKey* idChainMasterPubKey = getIdChainMasterPublicKey(seed.get(), seedLen);
-
-    jobject jIdChainMasterPublicKey = NewData(jEnv);
-    SetDataBuffer(jEnv, jIdChainMasterPublicKey,
-                  reinterpret_cast<int8_t *>(idChainMasterPubKey), sizeof(*idChainMasterPubKey));
-    delete idChainMasterPubKey;
-
-    return jIdChainMasterPublicKey;
-}
-
-
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_org_elastos_sdk_keypair_ElastosKeypairDID_generateIdChainSubPrivateKey(JNIEnv *jEnv, jclass jType,
-                                                                          jobject jSeed, jint jSeedLen,
-                                                                          jint jPurpose, jint jIndex) {
-    auto seed = GetDataBuffer(jEnv, jSeed);
-    int seedLen = jSeedLen;
-    int purpose = jPurpose;
-    int index = jIndex;
-
-    char *idChainSubPrivKey = generateIdChainSubPrivateKey(seed.get(), seedLen, purpose, index);
-
-    auto jIdChainSubPrivateKey = JniUtils::GetStringSafely(jEnv, idChainSubPrivKey, false);
-    freeBuf(idChainSubPrivKey);
-
-    return jIdChainSubPrivateKey.get();
-}
-
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_org_elastos_sdk_keypair_ElastosKeypairDID_generateIdChainSubPublicKey(JNIEnv *jEnv, jclass jType,
-                                                                         jobject jIdMasterPublicKey,
-                                                                         jint jPurpose, jint jIndex) {
-
-    auto idMasterPublicKey = GetDataBuffer(jEnv, jIdMasterPublicKey);
-    int purpose = jPurpose;
-    int index = jIndex;
-
-    char *idChainSubPubKey = generateIdChainSubPublicKey(reinterpret_cast<const MasterPublicKey *>(idMasterPublicKey.get()),
-                                                         purpose, index);
-
-    auto jIdChainSubPubateKey = JniUtils::GetStringSafely(jEnv, idChainSubPubKey, false);
-    freeBuf(idChainSubPubKey);
-
-    return jIdChainSubPubateKey.get();
-}
-
-extern "C"
 JNIEXPORT jstring JNICALL
 Java_org_elastos_sdk_keypair_ElastosKeypairDID_getDid(JNIEnv *jEnv, jclass jType,
                                                     jstring jIdPublicKey) {
