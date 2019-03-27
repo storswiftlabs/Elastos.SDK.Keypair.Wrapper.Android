@@ -10,6 +10,11 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
 
+        externalNativeBuild {
+            cmake {
+                    arguments "-DCFG_ELASTOS_SDK_KEYPAIR_C_DIR=${buildDir}/tmp/Elastos.SDK.Keypair.C"
+            }
+        }
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
         }
@@ -25,7 +30,7 @@ android {
 
     externalNativeBuild {
         cmake {
-            path "CMakeLists.txt"
+            path "src/main/cpp/CMakeLists.txt"
         }
     }
 }
