@@ -21,5 +21,10 @@ mkdir -p "$BUILD_DIR/";
 cp "$PROJECT_DIR/lib/build/outputs/aar/lib-debug.aar" "$TARGET_PATH";
 git tag --force ${PROJECT_VERSION}
 
+
+TARBALL_PATH="$BUILD_DIR/${PROJECT_NAME}-${PROJECT_VERSION}.zip";
+cd "$BUILD_DIR";
+zip -r "$TARBALL_PATH" . -i $(basename "$TARGET_PATH");
+
 echo "Done!!!";
 
