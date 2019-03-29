@@ -47,6 +47,10 @@ task buildDepends(type: Exec) {
     commandLine 'bash', '-c', "export ANDROID_NDK_HOME=${android.ndkDirectory}; ${rootProject.projectDir}/scripts/build-depends.sh"
 }
 preBuild.dependsOn buildDepends
+task cleanDepends(type: Exec) {
+    commandLine 'bash', '-c', "export ANDROID_NDK_HOME=${android.ndkDirectory}; ${rootProject.projectDir}/scripts/clean-depends.sh"
+}
+clean.dependsOn cleanDepends
 
 project.ext {
     extractNativeRunBefore = [ 'externalNativeBuild${buildType}' ]
