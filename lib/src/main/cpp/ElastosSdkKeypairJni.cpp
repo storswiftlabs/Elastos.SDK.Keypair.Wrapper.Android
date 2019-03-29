@@ -137,6 +137,17 @@ Java_org_elastos_sdk_keypair_ElastosKeypair_getAddress(JNIEnv *jEnv, jclass jTyp
 }
 
 extern "C"
+JNIEXPORT jboolean JNICALL
+Java_org_elastos_sdk_keypair_ElastosKeypair_isAddressValid(JNIEnv *jEnv, jclass jType,
+                                                           jstring jAddress) {
+    auto address = JniUtils::GetStringSafely(jEnv, jAddress);
+
+    bool ret = isAddressValid(address.get());
+
+    return ret;
+}
+
+extern "C"
 JNIEXPORT jint JNICALL
 Java_org_elastos_sdk_keypair_ElastosKeypair_sign(JNIEnv *jEnv, jclass jType,
                                                jstring jPrivateKey,

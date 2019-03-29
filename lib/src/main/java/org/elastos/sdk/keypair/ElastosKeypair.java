@@ -63,6 +63,18 @@ public final class ElastosKeypair extends NativeBridge {
 
     /**
      * \~English
+     * Check the address is valid.
+     *
+     * @param
+     *      address          [in] the address.
+     *
+     * @return
+     *      true if valid address, or false if not.
+     */
+    public static native boolean isAddressValid(String address);
+
+    /**
+     * \~English
      * Get seed from mnemonic.
      *
      * @param

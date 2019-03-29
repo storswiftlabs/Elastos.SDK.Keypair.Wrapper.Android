@@ -26,7 +26,8 @@ public class MainActivity extends Activity {
         TextView txtMsg = findViewById(R.id.txt_message);
 
         findViewById(R.id.btn_test_mnemonic).setOnClickListener((view) -> {
-            String message = testGenrateMnemonic();
+            String message = testAddressValid();
+            message += testGenrateMnemonic();
             txtMsg.setText(message);
         });
         findViewById(R.id.btn_test_hdwallet).setOnClickListener((view) -> {
@@ -42,6 +43,25 @@ public class MainActivity extends Activity {
             message += testCosignTxData();
             txtMsg.setText(message);
         });
+    }
+
+    private String testAddressValid() {
+        String message = "";
+
+        String address = "EMmTCeziWZd6K9gY83u7tumYX9ZLKTNBX9";
+        boolean ret = ElastosKeypair.isAddressValid(address);
+        message += "address: " + address + ", valid:" + ret + "\n";
+
+        address = "EMmTCeziWZd6K9gY83u7tumYX9ZLKTNBX";
+        ret = ElastosKeypair.isAddressValid(address);
+        message += "address: " + address + ", valid:" + ret + "\n";
+
+        address = "iMmTCeziWZd6K9gY83u7tumYX9ZLKTNBX9";
+        ret = ElastosKeypair.isAddressValid(address);
+        message += "address: " + address + ", valid:" + ret + "\n";
+
+        message += "================================================\n";
+        return message;
     }
 
     private String testGenrateMnemonic() {
