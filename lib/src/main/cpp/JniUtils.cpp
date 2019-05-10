@@ -208,6 +208,27 @@ std::shared_ptr<_jstring> JniUtils::GetStringSafely(JNIEnv* env, const char* str
     return ret;
 }
 
+std::shared_ptr<_jobjectArray> JniUtils::GetStringArraySafely(JNIEnv* env, const char* data[], int len, bool with_deleter)
+{
+    std::shared_ptr<_jobjectArray> ret;
+    std::thread::id thread_id = std::this_thread::get_id();
+
+    if(len <= 0) {
+        return ret; // nullptr
+    }
+
+    std::shared_ptr<_jstring> jDataPtr[len];
+    jobject jData[len];
+    for(int idx = 0; idx < len; idx++) {
+        jDataPtr[idx] = GetStringSafely(env, data[idx]);
+        jData[idx] = jDataPtr[idx].get();
+    }
+
+    ret = GetObjectArraySafely(env, jData, len, with_deleter);
+
+    return ret;
+}
+
 std::shared_ptr<const char> JniUtils::CopyStringSafely(JNIEnv* env, jstring str)
 {
     std::shared_ptr<const char> ret;
@@ -355,7 +376,7 @@ std::shared_ptr<_jobject*> JniUtils::GetObjectArraySafely(JNIEnv* env, jobjectAr
     return ret;
 }
 
-std::shared_ptr<_jobjectArray> JniUtils::GetObjectArraySafely(JNIEnv* env, jobject data[], int len)
+std::shared_ptr<_jobjectArray> JniUtils::GetObjectArraySafely(JNIEnv* env, jobject data[], int len, bool with_deleter)
 {
     std::shared_ptr<_jobjectArray> ret;
     std::thread::id thread_id = std::this_thread::get_id();
@@ -376,6 +397,9 @@ std::shared_ptr<_jobjectArray> JniUtils::GetObjectArraySafely(JNIEnv* env, jobje
         return jdata;
     };
     auto deleter = [=](jobjectArray ptr) -> void {
+        if (with_deleter == false) {
+            return;
+        }
 //        Log::D(JniUtils::TAG, "GetObjectArraySafely deleter(), env=%p this=%p", env, ptr);
         ENSURE_RUNON_THREAD(thread_id);
         if(ptr == nullptr) {

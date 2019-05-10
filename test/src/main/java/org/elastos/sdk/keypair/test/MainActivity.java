@@ -2,10 +2,12 @@ package org.elastos.sdk.keypair.test;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
 
 import org.elastos.sdk.keypair.ElastosKeypair;
+import org.elastos.sdk.keypair.ElastosKeypairCrypto;
 import org.elastos.sdk.keypair.ElastosKeypairDID;
 import org.elastos.sdk.keypair.ElastosKeypairHD;
 import org.elastos.sdk.keypair.ElastosKeypairSign;
@@ -41,6 +43,10 @@ public class MainActivity extends Activity {
         findViewById(R.id.btn_test_sign).setOnClickListener((view) -> {
             String message = testSignTxData();
             message += testCosignTxData();
+            txtMsg.setText(message);
+        });
+        findViewById(R.id.btn_test_crypto).setOnClickListener((view) -> {
+            String message = testCrypto();
             txtMsg.setText(message);
         });
     }
@@ -240,6 +246,35 @@ public class MainActivity extends Activity {
 
         String serialize = ElastosKeypairSign.serializeMultiSignTransaction(signedData2);
         message += "serialize: " + serialize + "\n";
+
+        message = "";
+        Integer signerCount = 0;
+        String[] signerArray = ElastosKeypairSign.getSignedSigners(signedData1, signerCount);
+        message += "getSignedSigners: " + "\n";
+        for(String signer : signerArray) {
+            message += "signer: " + signer + "\n";
+        }
+
+        message += "================================================\n";
+        return message;
+    }
+
+    private String testCrypto() {
+        String message = "";
+
+        String publicKey = "02bc11aa5c35acda6f6f219b94742dd9a93c1d11c579f98f7e3da05ad910a48306";
+        String privateKey = "543c241f89bebb660157bcd12d7ab67cf69f3158240a808b22eb98447bad205d";
+        final String originText = "Hello World!!!";
+
+        message += "originText: " + originText + "\n";
+
+        String cipherText = ElastosKeypairCrypto.eciesEncrypt(publicKey, originText);
+        message += "cipherText: " + cipherText + "\n";
+
+        String plainText = ElastosKeypairCrypto.eciesDecrypt(privateKey, cipherText);
+        message += "plainText: " + plainText + "\n";
+
+        message += "result: " + TextUtils.equals(originText, plainText) + "\n";
 
         message += "================================================\n";
         return message;

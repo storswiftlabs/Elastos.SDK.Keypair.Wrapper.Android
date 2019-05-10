@@ -30,13 +30,15 @@ public:
 
     static std::shared_ptr<const char> CopyStringSafely(JNIEnv* env, jstring str);
 
+    static std::shared_ptr<_jobjectArray> GetStringArraySafely(JNIEnv* env, const char* data[], int len, bool with_deleter = true);
+
     static std::shared_ptr<int8_t> GetByteArraySafely(JNIEnv* env, jbyteArray data);
     static std::shared_ptr<_jbyteArray> GetByteArraySafely(JNIEnv* env, int8_t data[], int len);
 
     static std::shared_ptr<int8_t> CopyByteArraySafely(JNIEnv* env, jbyteArray data);
 
     static std::shared_ptr<_jobject*> GetObjectArraySafely(JNIEnv* env, jobjectArray data);
-    static std::shared_ptr<_jobjectArray> GetObjectArraySafely(JNIEnv* env, jobject data[], int len);
+    static std::shared_ptr<_jobjectArray> GetObjectArraySafely(JNIEnv* env, jobject data[], int len, bool with_deleter = true);
 
 
 //    static void CacheJavaClass(JNIEnv* env, const char* class_name_list[], int size);

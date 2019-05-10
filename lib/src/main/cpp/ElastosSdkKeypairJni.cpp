@@ -367,3 +367,63 @@ Java_org_elastos_sdk_keypair_ElastosKeypairSign_serializeMultiSignTransaction(JN
 
     return jSerialize.get();
 }
+
+extern "C"
+JNIEXPORT jobjectArray JNICALL
+Java_org_elastos_sdk_keypair_ElastosKeypairSign_getSignedSigners(JNIEnv *jEnv, jclass jType,
+                                                                 jstring jTransaction,
+                                                                 jobject jOutLen) {
+    auto transaction = JniUtils::GetStringSafely(jEnv, jTransaction);
+
+    int signerCnt = 0;
+    char** signerArray = getSignedSigners(transaction.get(), &signerCnt);
+
+    if(signerArray == nullptr) {
+        return nullptr;
+    }
+
+    auto jSignerArray = JniUtils::GetStringArraySafely(jEnv, const_cast<const char**>(signerArray), signerCnt, false);
+    for(int idx = 0; idx < signerCnt; idx++) {
+        freeBuf(signerArray[idx]);
+    }
+    delete[] signerArray;
+
+    jclass jIntegerClass = jEnv->GetObjectClass(jOutLen);
+    jfieldID jIntegerFieldID = jEnv->GetFieldID(jIntegerClass, "value", "I");
+    jEnv->SetIntField(jOutLen, jIntegerFieldID, signerCnt);
+
+    return jSignerArray.get();
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_org_elastos_sdk_keypair_ElastosKeypairCrypto_eciesEncrypt(JNIEnv *jEnv, jclass jType,
+                                                               jstring jPublicKey,
+                                                               jstring jPlainText) {
+    auto publicKey = JniUtils::GetStringSafely(jEnv, jPublicKey);
+    auto plainText = JniUtils::GetStringSafely(jEnv, jPlainText);
+
+    char* cipherText = eciesEncrypt(publicKey.get(), plainText.get());
+
+    auto jCipherText = JniUtils::GetStringSafely(jEnv, cipherText, false);
+    freeBuf(cipherText);
+
+    return jCipherText.get();
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_org_elastos_sdk_keypair_ElastosKeypairCrypto_eciesDecrypt(JNIEnv *jEnv, jclass jType,
+                                                               jstring jPrivateKey,
+                                                               jstring jCipherText) {
+    auto privateKey = JniUtils::GetStringSafely(jEnv, jPrivateKey);
+    auto cipherText = JniUtils::GetStringSafely(jEnv, jCipherText);
+
+    int plainTextLen = 0;
+    char* plainText = eciesDecrypt(privateKey.get(), cipherText.get(), &plainTextLen);
+
+    auto jPlainText = JniUtils::GetStringSafely(jEnv, plainText, false);
+    freeBuf(plainText);
+
+    return jPlainText.get();
+}

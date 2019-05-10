@@ -66,4 +66,5 @@ public final class ElastosKeypairSign extends NativeBridge {
      */
     public static native String serializeMultiSignTransaction(String transaction);
 
+    public static native String[] getSignedSigners(String transaction, Integer outLen);
 }

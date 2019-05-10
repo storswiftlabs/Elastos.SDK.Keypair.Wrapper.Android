@@ -33,6 +33,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Test\nSign"/>
+            <Button android:id="@+id/btn_test_crypto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Test\nCrypto"/>
         </LinearLayout>
     </LinearLayout>
 
