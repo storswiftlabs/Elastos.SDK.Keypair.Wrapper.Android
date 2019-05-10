@@ -247,7 +247,6 @@ public class MainActivity extends Activity {
         String serialize = ElastosKeypairSign.serializeMultiSignTransaction(signedData2);
         message += "serialize: " + serialize + "\n";
 
-        message = "";
         Integer signerCount = 0;
         String[] signerArray = ElastosKeypairSign.getSignedSigners(signedData1, signerCount);
         message += "getSignedSigners: " + "\n";

@@ -384,9 +384,9 @@ Java_org_elastos_sdk_keypair_ElastosKeypairSign_getSignedSigners(JNIEnv *jEnv, j
 
     auto jSignerArray = JniUtils::GetStringArraySafely(jEnv, const_cast<const char**>(signerArray), signerCnt, false);
     for(int idx = 0; idx < signerCnt; idx++) {
-        freeBuf(signerArray[idx]);
+        free(signerArray[idx]);
     }
-    delete[] signerArray;
+    free(signerArray);
 
     jclass jIntegerClass = jEnv->GetObjectClass(jOutLen);
     jfieldID jIntegerFieldID = jEnv->GetFieldID(jIntegerClass, "value", "I");
@@ -406,7 +406,7 @@ Java_org_elastos_sdk_keypair_ElastosKeypairCrypto_eciesEncrypt(JNIEnv *jEnv, jcl
     char* cipherText = eciesEncrypt(publicKey.get(), plainText.get());
 
     auto jCipherText = JniUtils::GetStringSafely(jEnv, cipherText, false);
-    freeBuf(cipherText);
+    free(cipherText);
 
     return jCipherText.get();
 }
@@ -423,7 +423,7 @@ Java_org_elastos_sdk_keypair_ElastosKeypairCrypto_eciesDecrypt(JNIEnv *jEnv, jcl
     char* plainText = eciesDecrypt(privateKey.get(), cipherText.get(), &plainTextLen);
 
     auto jPlainText = JniUtils::GetStringSafely(jEnv, plainText, false);
-    freeBuf(plainText);
+    free(plainText);
 
     return jPlainText.get();
 }
