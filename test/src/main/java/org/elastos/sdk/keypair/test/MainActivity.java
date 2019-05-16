@@ -248,7 +248,7 @@ public class MainActivity extends Activity {
         message += "serialize: " + serialize + "\n";
 
         Integer signerCount = 0;
-        String[] signerArray = ElastosKeypairSign.getSignedSigners(signedData1, signerCount);
+        String[] signerArray = ElastosKeypairSign.getSignedSigners(signedData2, signerCount);
         message += "getSignedSigners: " + "\n";
         for(String signer : signerArray) {
             message += "signer: " + signer + "\n";

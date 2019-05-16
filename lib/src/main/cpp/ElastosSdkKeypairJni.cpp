@@ -370,9 +370,9 @@ Java_org_elastos_sdk_keypair_ElastosKeypairSign_serializeMultiSignTransaction(JN
 
 extern "C"
 JNIEXPORT jobjectArray JNICALL
-Java_org_elastos_sdk_keypair_ElastosKeypairSign_getSignedSigners(JNIEnv *jEnv, jclass jType,
-                                                                 jstring jTransaction,
-                                                                 jobject jOutLen) {
+Java_org_elastos_sdk_keypair_ElastosKeypairSign__1getSignedSigners(JNIEnv *jEnv, jclass jType,
+                                                                   jstring jTransaction,
+                                                                   jobject jOutLen) {
     auto transaction = JniUtils::GetStringSafely(jEnv, jTransaction);
 
     int signerCnt = 0;

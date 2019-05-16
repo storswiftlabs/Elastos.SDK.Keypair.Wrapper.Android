@@ -1,5 +1,7 @@
 package org.elastos.sdk.keypair;
 
+import java.util.Arrays;
+
 public final class ElastosKeypairSign extends NativeBridge {
     private ElastosKeypairSign() {}
 
@@ -66,5 +68,15 @@ public final class ElastosKeypairSign extends NativeBridge {
      */
     public static native String serializeMultiSignTransaction(String transaction);
 
-    public static native String[] getSignedSigners(String transaction, Integer outLen);
+    public static String[] getSignedSigners(String transaction, Integer outLen) {
+        Object[] ret = _getSignedSigners(transaction, outLen);
+        if(ret == null) {
+            return null;
+        }
+
+        String[] signerArray = Arrays.copyOf(ret, ret.length, String[].class);
+        return signerArray;
+    }
+
+    private static native Object[] _getSignedSigners(String transaction, Integer outLen);
 }
