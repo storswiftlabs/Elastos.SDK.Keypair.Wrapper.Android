@@ -382,17 +382,24 @@ Java_org_elastos_sdk_keypair_ElastosKeypairSign__1getSignedSigners(JNIEnv *jEnv,
         return nullptr;
     }
 
-    auto jSignerArray = JniUtils::GetStringArraySafely(jEnv, const_cast<const char**>(signerArray), signerCnt, false);
+    jobjectArray ret = jEnv->NewObjectArray(signerCnt, jEnv->FindClass("java/lang/String"), jEnv->NewStringUTF(""));
+
+    for(int i = 0; i < signerCnt; i++) {
+        jEnv->SetObjectArrayElement(ret, i, jEnv->NewStringUTF(signerArray[i]));
+    }
+
+//    auto jSignerArray = JniUtils::GetStringArraySafely(jEnv, const_cast<const char**>(signerArray), signerCnt, false);
     for(int idx = 0; idx < signerCnt; idx++) {
         free(signerArray[idx]);
     }
     free(signerArray);
 
-    jclass jIntegerClass = jEnv->GetObjectClass(jOutLen);
-    jfieldID jIntegerFieldID = jEnv->GetFieldID(jIntegerClass, "value", "I");
-    jEnv->SetIntField(jOutLen, jIntegerFieldID, signerCnt);
+//    jclass jIntegerClass = jEnv->GetObjectClass(jOutLen);
+//    jfieldID jIntegerFieldID = jEnv->GetFieldID(jIntegerClass, "value", "I");
+//    jEnv->SetIntField(jOutLen, jIntegerFieldID, signerCnt);
 
-    return jSignerArray.get();
+//    return jSignerArray.get();
+    return ret;
 }
 
 extern "C"
