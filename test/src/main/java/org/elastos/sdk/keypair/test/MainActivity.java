@@ -195,7 +195,7 @@ public class MainActivity extends Activity {
                 + "\"index\":0,\"address\":\"EeniFrrhuFgQXRrQXsiM1V4Amdsk4vfkVc\"}],"
                 + "\"Outputs\":[{\"address\":\"EbxU18T3M9ufnrkRY7NLt6sKyckDW4VAsA\","
                 + "\"amount\":2000000}]}]}";
-        String signedData = ElastosKeypairSign.generateRawTransaction(transaction);
+        String signedData = ElastosKeypairSign.generateRawTransaction(transaction, null);
         if(signedData == null) {
             String errmsg = "Failed to generate raw transaction.\n";
             Log.e(TAG, errmsg);

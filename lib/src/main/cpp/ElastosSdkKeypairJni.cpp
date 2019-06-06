@@ -263,15 +263,16 @@ Java_org_elastos_sdk_keypair_ElastosKeypairDID_getDid(JNIEnv *jEnv, jclass jType
 }
 
 
-
-
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_org_elastos_sdk_keypair_ElastosKeypairSign_generateRawTransaction(JNIEnv *jEnv, jclass jType,
-                                                                     jstring jTransaction) {
+                                                                       jstring jTransaction,
+                                                                       jstring jAssertId) {
     auto transaction = JniUtils::GetStringSafely(jEnv, jTransaction);
+    auto assertId = JniUtils::GetStringSafely(jEnv, jAssertId);
 
-    char* rawTx = generateRawTransaction(transaction.get());
+    char* rawTx = generateRawTransaction(transaction.get(),
+                                         assertId.get() == nullptr ? ELA_ASSERT_ID : assertId.get());
     if(rawTx == nullptr) {
         return nullptr;
     }

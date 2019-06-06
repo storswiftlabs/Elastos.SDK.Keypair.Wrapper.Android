@@ -11,12 +11,12 @@ public final class ElastosKeypairSign extends NativeBridge {
      *
      * @param
      *      transaction          [in] the transaction data in json string.
+     *      transaction          [in] the assert id, use ELA_ASSERT_ID if input `null`.
      *
      * @return
      *      the raw transaction data if succeeded, or nullptr if failed.
      */
-    public static native String generateRawTransaction(String transaction);
-
+    public static native String generateRawTransaction(String transaction, String assertId);
 
 // Apis for multi sign
     /**
