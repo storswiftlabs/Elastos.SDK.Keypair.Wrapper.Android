@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
         message += "mnemonic: " + mnemonic + "\n";
 
         mSeed = new ElastosKeypair.Data();
-        int ret = ElastosKeypair.getSeedFromMnemonic(mSeed, mnemonic, language, words, "0");
+        int ret = ElastosKeypair.getSeedFromMnemonic(mSeed, mnemonic, "0");
         if (ret <= 0) {
             String errmsg = "Failed to get seed from mnemonic. ret=" + ret + "\n";
             Log.e(TAG, errmsg);

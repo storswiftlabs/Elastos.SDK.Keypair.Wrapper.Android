@@ -62,15 +62,12 @@ extern "C"
 JNIEXPORT jint JNICALL
 Java_org_elastos_sdk_keypair_ElastosKeypair_getSeedFromMnemonic(JNIEnv *jEnv, jclass jType,
                                                               jobject jSeed, jstring jMnemonic,
-                                                              jstring jLanguage, jstring jWords,
                                                               jstring jMnemonicPassword) {
     auto mnemonic = JniUtils::GetStringSafely(jEnv, jMnemonic);
-    auto language = JniUtils::GetStringSafely(jEnv, jLanguage);
-    auto words = JniUtils::GetStringSafely(jEnv, jWords);
     auto mnemonicPassword = JniUtils::GetStringSafely(jEnv, jMnemonicPassword);
 
     void *seed = nullptr;
-    int seedLen = getSeedFromMnemonic(&seed, mnemonic.get(), language.get(), words.get(),  mnemonicPassword.get());
+    int seedLen = getSeedFromMnemonic(&seed, mnemonic.get(), mnemonicPassword.get());
     if(seedLen <= 0 || seed == nullptr) {
         return seedLen;
     }

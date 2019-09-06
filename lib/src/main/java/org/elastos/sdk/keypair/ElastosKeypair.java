@@ -82,16 +82,12 @@ public final class ElastosKeypair extends NativeBridge {
      * @param
      *      mnemonic            [in] mnemonic, seperated by ' '.
      * @param
-     *      language            [in] language, such as english, chinese etc.
-     * @param
-     *      words               [in] the words, seperated by ' ', if the language is english, words is empty string.
-     * @param
      *      mnemonicPassword    [in] mnemonic password, empty string or effctive password.
      *
      * @return
      *      the seed buffer length if succeeded, or 0 if failed.
      */
-    public static native int getSeedFromMnemonic(Data seed, String mnemonic, String language, String words, String mnemonicPassword);
+    public static native int getSeedFromMnemonic(Data seed, String mnemonic, String mnemonicPassword);
 
     /**
      * \~English
