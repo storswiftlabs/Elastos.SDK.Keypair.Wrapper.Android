@@ -267,13 +267,13 @@ public class MainActivity extends Activity {
 
         message += "originText: " + originText + "\n";
 
-        String cipherText = ElastosKeypairCrypto.eciesEncrypt(publicKey, originText);
+        String cipherText = ElastosKeypairCrypto.eciesEncrypt(publicKey, originText.getBytes());
         message += "cipherText: " + cipherText + "\n";
 
-        String plainText = ElastosKeypairCrypto.eciesDecrypt(privateKey, cipherText);
-        message += "plainText: " + plainText + "\n";
+        byte[] plainText = ElastosKeypairCrypto.eciesDecrypt(privateKey, cipherText);
+        message += "plainText: " + new String(plainText) + "\n";
 
-        message += "result: " + TextUtils.equals(originText, plainText) + "\n";
+        message += "result: " + TextUtils.equals(originText, new String(plainText)) + "\n";
 
         message += "================================================\n";
         return message;

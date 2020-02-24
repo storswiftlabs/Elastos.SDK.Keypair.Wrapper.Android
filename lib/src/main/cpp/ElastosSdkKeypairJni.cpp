@@ -4,6 +4,7 @@
 #include "Elastos.Wallet.Utility.h"
 
 #include "JniUtils.hpp"
+#include "Log.hpp"
 
 static const char* JavaClassName_ElastosKeypair_Data = "org/elastos/sdk/keypair/ElastosKeypair$Data";
 
@@ -404,11 +405,13 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_org_elastos_sdk_keypair_ElastosKeypairCrypto_eciesEncrypt(JNIEnv *jEnv, jclass jType,
                                                                jstring jPublicKey,
-                                                               jstring jPlainText) {
+                                                               jbyteArray jPlainData) {
     auto publicKey = JniUtils::GetStringSafely(jEnv, jPublicKey);
-    auto plainText = JniUtils::GetStringSafely(jEnv, jPlainText);
+    auto plainText = JniUtils::GetByteArraySafely(jEnv, jPlainData);
+    auto len = jEnv->GetArrayLength (jPlainData);
 
-    char* cipherText = eciesEncrypt(publicKey.get(), plainText.get());
+    char* cipherText = eciesEncrypt(publicKey.get(),
+            reinterpret_cast<unsigned char *>(plainText.get()), len);
 
     auto jCipherText = JniUtils::GetStringSafely(jEnv, cipherText, false);
     free(cipherText);
@@ -417,7 +420,7 @@ Java_org_elastos_sdk_keypair_ElastosKeypairCrypto_eciesEncrypt(JNIEnv *jEnv, jcl
 }
 
 extern "C"
-JNIEXPORT jstring JNICALL
+JNIEXPORT jbyteArray JNICALL
 Java_org_elastos_sdk_keypair_ElastosKeypairCrypto_eciesDecrypt(JNIEnv *jEnv, jclass jType,
                                                                jstring jPrivateKey,
                                                                jstring jCipherText) {
@@ -425,10 +428,11 @@ Java_org_elastos_sdk_keypair_ElastosKeypairCrypto_eciesDecrypt(JNIEnv *jEnv, jcl
     auto cipherText = JniUtils::GetStringSafely(jEnv, jCipherText);
 
     int plainTextLen = 0;
-    char* plainText = eciesDecrypt(privateKey.get(), cipherText.get(), &plainTextLen);
+    unsigned char* plainText = eciesDecrypt(privateKey.get(), cipherText.get(), &plainTextLen);
 
-    auto jPlainText = JniUtils::GetStringSafely(jEnv, plainText, false);
+    jbyteArray jdata = jEnv->NewByteArray(plainTextLen);
+    jEnv->SetByteArrayRegion(jdata, 0, plainTextLen, reinterpret_cast<int8_t *>(plainText));
     free(plainText);
 
-    return jPlainText.get();
+    return jdata;
 }
