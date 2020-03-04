@@ -18,7 +18,11 @@ cd "$PROJECT_DIR";
 ./gradlew :lib:assembleDebug -P versionCode=${PROJECT_REVISION} -P versionName=${PROJECT_VERSION/v/}
 rm -rf "$TARGET_PATH";
 mkdir -p "$BUILD_DIR/";
-cp "$PROJECT_DIR/lib/build/outputs/aar/lib-debug.aar" "$TARGET_PATH";
+if [ -f "$PROJECT_DIR/lib/build/outputs/aar/lib-debug.aar" ]; then
+    cp "$PROJECT_DIR/lib/build/outputs/aar/lib-debug.aar" "$TARGET_PATH";
+else
+    cp "$PROJECT_DIR/lib/build/outputs/aar/lib.aar" "$TARGET_PATH";
+fi
 git tag --force ${PROJECT_VERSION}
 
 
