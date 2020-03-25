@@ -135,6 +135,23 @@ Java_org_elastos_sdk_keypair_ElastosKeypair_getAddress(JNIEnv *jEnv, jclass jTyp
 }
 
 extern "C"
+JNIEXPORT jstring JNICALL
+Java_org_elastos_sdk_keypair_ElastosKeypair_getAddressByInfo(JNIEnv *jEnv, jclass jType,
+                                                       jstring jInfo) {
+    auto info = JniUtils::GetStringSafely(jEnv, jInfo);
+
+    char *address = getAddressByInfo(info.get());
+    if(address == nullptr) {
+        return nullptr;
+    }
+
+    auto jAddress = JniUtils::GetStringSafely(jEnv, address, false);
+    freeBuf(address);
+
+    return jAddress.get();
+}
+
+extern "C"
 JNIEXPORT jboolean JNICALL
 Java_org_elastos_sdk_keypair_ElastosKeypair_isAddressValid(JNIEnv *jEnv, jclass jType,
                                                            jstring jAddress) {
@@ -260,6 +277,22 @@ Java_org_elastos_sdk_keypair_ElastosKeypairDID_getDid(JNIEnv *jEnv, jclass jType
     return jDid.get();
 }
 
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_org_elastos_sdk_keypair_ElastosKeypairDID_getDidByInfo(JNIEnv *jEnv, jclass jType,
+                                                      jstring jInfo) {
+    auto info = JniUtils::GetStringSafely(jEnv, jInfo);
+
+    char *did = getDidByInfo(info.get());
+    if(did == nullptr) {
+        return nullptr;
+    }
+
+    auto jDid = JniUtils::GetStringSafely(jEnv, did, false);
+    freeBuf(did);
+
+    return jDid.get();
+}
 
 extern "C"
 JNIEXPORT jstring JNICALL

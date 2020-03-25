@@ -63,6 +63,18 @@ public final class ElastosKeypair extends NativeBridge {
 
     /**
      * \~English
+     * Get address from personal info.
+     *
+     * @param
+     *      info     [in] personal info, such as phone number, email address etc.
+     *
+     * @return
+     *      the address if succeeded, or nullptr if failed.
+     */
+    public static native String getAddressByInfo(String info);
+
+    /**
+     * \~English
      * Check the address is valid.
      *
      * @param

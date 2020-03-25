@@ -15,4 +15,16 @@ public final class ElastosKeypairDID extends NativeBridge {
      *      the DID if succeeded, or nullptr if failed.
      */
     public static native String getDid(String idPublicKey);
+
+    /**
+     * \~English
+     * Get DID from personal info.
+     *
+     * @param
+     *      info     [in] personal info, such as phone number, email address etc.
+     *
+     * @return
+     *      the DID if succeeded, or nullptr if failed.
+     */
+    public static native String getDidByInfo(String info);
 }

@@ -1,9 +1,12 @@
 package org.elastos.sdk.keypair.test;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.elastos.sdk.keypair.ElastosKeypair;
@@ -14,6 +17,7 @@ import org.elastos.sdk.keypair.ElastosKeypairSign;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
+    private TextView txtMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +29,7 @@ public class MainActivity extends Activity {
     protected void onStart() {
         super.onStart();
 
-        TextView txtMsg = findViewById(R.id.txt_message);
+        txtMsg = findViewById(R.id.txt_message);
 
         findViewById(R.id.btn_test_mnemonic).setOnClickListener((view) -> {
             String message = testAddressValid();
@@ -48,6 +52,9 @@ public class MainActivity extends Activity {
         findViewById(R.id.btn_test_crypto).setOnClickListener((view) -> {
             String message = testCrypto();
             txtMsg.setText(message);
+        });
+        findViewById(R.id.btn_test_info_addr).setOnClickListener((view) -> {
+            testAddressByInfo();
         });
     }
 
@@ -279,6 +286,33 @@ public class MainActivity extends Activity {
         return message;
     }
 
+    private void testAddressByInfo() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        EditText edit = new EditText(this);
+        builder.setTitle("Please input info")
+                .setView(edit)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String info =  edit.getText().toString();
+                        if (info.isEmpty()) return;
+                        String message = "";
+                        String address = ElastosKeypair.getAddressByInfo(info);
+                        message += "address: " + address + "\n";
+                        String did = ElastosKeypairDID.getDidByInfo(info);
+                        message += "did: " + did + "\n";
+                        txtMsg.setText(message);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        builder.create().show();
+
+    }
 
     private ElastosKeypair.Data mSeed;
     private int mSeedLen;
