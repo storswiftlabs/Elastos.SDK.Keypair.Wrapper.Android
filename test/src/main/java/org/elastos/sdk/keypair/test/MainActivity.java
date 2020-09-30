@@ -12,6 +12,7 @@ import android.widget.TextView;
 import org.elastos.sdk.keypair.ElastosKeypair;
 import org.elastos.sdk.keypair.ElastosKeypairCrypto;
 import org.elastos.sdk.keypair.ElastosKeypairDID;
+import org.elastos.sdk.keypair.ElastosKeypairFileCoin;
 import org.elastos.sdk.keypair.ElastosKeypairHD;
 import org.elastos.sdk.keypair.ElastosKeypairSign;
 
@@ -55,6 +56,16 @@ public class MainActivity extends Activity {
         });
         findViewById(R.id.btn_test_info_addr).setOnClickListener((view) -> {
             testAddressByInfo();
+        });
+
+        findViewById(R.id.btn_test_filecoin).setOnClickListener((view) -> {
+            String message = testFileCoin();
+            txtMsg.setText(message);
+        });
+
+        findViewById(R.id.btn_test_filecoin_tx).setOnClickListener((view) -> {
+            String message = testFileCoinTx();
+            txtMsg.setText(message);
         });
     }
 
@@ -312,6 +323,143 @@ public class MainActivity extends Activity {
                 });
         builder.create().show();
 
+    }
+
+    private String testFileCoin() {
+        String message = "testFileCoin()\n";
+        String mnemonic = "voice kingdom wall sword pair unusual artefact opera keen aware stay game";
+        message += "mnemonic: " + mnemonic + "\n";
+
+        mSeed = new ElastosKeypair.Data();
+        int ret = ElastosKeypair.getSeedFromMnemonic(mSeed, mnemonic, "");
+        if (ret <= 0) {
+            String errmsg = "Failed to get seed from mnemonic. ret=" + ret + "\n";
+            Log.e(TAG, errmsg);
+            message += errmsg;
+            return message;
+        }
+        mSeedLen = ret;
+        message += "seed: " + mSeed.buf + ", len: " + mSeedLen + "\n";
+
+        String privateKey = ElastosKeypairFileCoin.GetSinglePrivateKey(mSeed, mSeedLen);
+        if (privateKey == null) {
+            String errmsg = "Failed to generate privateKey.\n";
+            Log.e(TAG, errmsg);
+            message += errmsg;
+
+            return message;
+        }
+        message += "privateKey: " + privateKey + "\n";
+
+        String publicKey = ElastosKeypairFileCoin.GetSinglePublicKey(mSeed, mSeedLen);
+        if (publicKey == null) {
+            String errmsg = "Failed to generate publicKey.\n";
+            Log.e(TAG, errmsg);
+            message += errmsg;
+
+            return message;
+        }
+        message += "publicKey: " + publicKey + "\n";
+        String publicKeyVerify = ElastosKeypairFileCoin.GetPublicKeyFromPrivateKey(privateKey);
+        assert (publicKey.equals(publicKeyVerify));
+
+        String address = ElastosKeypairFileCoin.GetAddress(publicKey);
+        if (address == null) {
+            String errmsg = "Failed to get address.\n";
+            Log.e(TAG, errmsg);
+            message += errmsg;
+
+            return message;
+        }
+        message += "address: " + address + "\n";
+
+        ElastosKeypair.Data data = new ElastosKeypair.Data();
+        data.buf = new byte[]{0, 1, 2, 3, 4, 5};
+        ElastosKeypair.Data signedData = new ElastosKeypair.Data();
+        int signedLen = ElastosKeypairFileCoin.Sign(privateKey, data, data.buf.length, signedData);
+        if (signedLen <= 0) {
+            String errmsg = "Failed to sign data.\n";
+            Log.e(TAG, errmsg);
+            message += errmsg;
+
+            return message;
+        }
+
+        boolean verified = ElastosKeypairFileCoin.Verify(publicKey, data, data.buf.length, signedData, signedLen);
+        message += "verified: " + verified + "\n";
+
+        return message;
+    }
+
+    private String testFileCoinTx() {
+        String message = "testFileCoin()\n";
+        String mnemonic = "voice kingdom wall sword pair unusual artefact opera keen aware stay game";
+        message += "mnemonic: " + mnemonic + "\n";
+
+        mSeed = new ElastosKeypair.Data();
+        int ret = ElastosKeypair.getSeedFromMnemonic(mSeed, mnemonic, "");
+        if (ret <= 0) {
+            String errmsg = "Failed to get seed from mnemonic. ret=" + ret + "\n";
+            Log.e(TAG, errmsg);
+            message += errmsg;
+            return message;
+        }
+        mSeedLen = ret;
+        message += "seed: " + mSeed.buf + ", len: " + mSeedLen + "\n";
+
+        String privateKey = ElastosKeypairFileCoin.GetSinglePrivateKey(mSeed, mSeedLen);
+        if (privateKey == null) {
+            String errmsg = "Failed to generate privateKey.\n";
+            Log.e(TAG, errmsg);
+            message += errmsg;
+
+            return message;
+        }
+        message += "privateKey: " + privateKey + "\n";
+
+        String publicKey = ElastosKeypairFileCoin.GetSinglePublicKey(mSeed, mSeedLen);
+        if (publicKey == null) {
+            String errmsg = "Failed to generate publicKey.\n";
+            Log.e(TAG, errmsg);
+            message += errmsg;
+
+            return message;
+        }
+        message += "publicKey: " + publicKey + "\n";
+
+        String address = ElastosKeypairFileCoin.GetAddress(publicKey);
+        if (address == null) {
+            String errmsg = "Failed to get address.\n";
+            Log.e(TAG, errmsg);
+            message += errmsg;
+
+            return message;
+        }
+        message += "address: " + address + "\n";
+
+        String tx = "{"
+            + "\"to\": \"t3xcnpgqifiwjivr65ylnxrvk3qjxb2hu5wz5b26z6kzr7z5shu4bicfwhv5vyoxyfiy6pjpj44cwndtmwe4ka\","
+            + "\"from\": \"" + address + "\","
+            + "\"value\": \"1\","
+            + "\"gasPremium\": \"1000000\","
+            + "\"gasFeeCap\": \"1000000\","
+            + "\"gasLimit\": 80000000,"
+            + "\"method\": 0,"
+            + "\"nonce\": 0,"
+            + "\"params\": \"\""
+            + "}";
+
+        String txRaw = ElastosKeypairFileCoin.GenerateRawTransaction(privateKey, tx);
+        if(txRaw == null) {
+            String errmsg = "Failed to generate raw transaction.\n";
+            Log.e(TAG, errmsg);
+            message += errmsg;
+
+            return message;
+        }
+        message += "txraw: " + txRaw + "\n";
+
+        return message;
     }
 
     private ElastosKeypair.Data mSeed;

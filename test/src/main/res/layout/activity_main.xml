@@ -42,6 +42,18 @@
                 android:layout_height="wrap_content"
                 android:text="Test\nCrypto"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <Button android:id="@+id/btn_test_filecoin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Test\nFileCoin"/>
+            <Button android:id="@+id/btn_test_filecoin_tx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Test\nFileCoinTx"/>
+        </LinearLayout>
     </LinearLayout>
 
     <TextView android:id="@+id/txt_message"

@@ -3,12 +3,11 @@
 
 #include "Elastos.Wallet.Utility.h"
 
+#include "ElastosSdkKeypairJni.hpp"
 #include "JniUtils.hpp"
 #include "Log.hpp"
 
-static const char* JavaClassName_ElastosKeypair_Data = "org/elastos/sdk/keypair/ElastosKeypair$Data";
-
-static jobject NewData(JNIEnv *jEnv)
+jobject NewData(JNIEnv *jEnv)
 {
     jclass jClass_Data = JniUtils::GetJavaClass(jEnv, JavaClassName_ElastosKeypair_Data);
     jmethodID jMethod_DataConstructor = jEnv->GetMethodID(jClass_Data, "<init>", "()V");
@@ -17,7 +16,7 @@ static jobject NewData(JNIEnv *jEnv)
     return jData;
 }
 
-static void SetDataBuffer(JNIEnv *jEnv, jobject jData, int8_t *buf, int size)
+void SetDataBuffer(JNIEnv *jEnv, jobject jData, int8_t *buf, int size)
 {
     auto jBuf = JniUtils::GetByteArraySafely(jEnv, buf, size);
 
@@ -28,7 +27,7 @@ static void SetDataBuffer(JNIEnv *jEnv, jobject jData, int8_t *buf, int size)
     return;
 }
 
-static std::shared_ptr<int8_t> GetDataBuffer(JNIEnv *jEnv, jobject data)
+std::shared_ptr<int8_t> GetDataBuffer(JNIEnv *jEnv, jobject data)
 {
     jclass jClass_Data = JniUtils::GetJavaClass(jEnv, JavaClassName_ElastosKeypair_Data);
     jfieldID jField_DataBuf = jEnv->GetFieldID(jClass_Data, "buf", JniUtils::JavaClassNameByteArray);
