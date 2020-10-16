@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class MainActivity extends Activity {
         super.onStart();
 
         txtMsg = findViewById(R.id.txt_message);
+        txtMsg.setMovementMethod(new ScrollingMovementMethod());
 
         findViewById(R.id.btn_test_mnemonic).setOnClickListener((view) -> {
             String message = testAddressValid();
@@ -49,6 +51,8 @@ public class MainActivity extends Activity {
             String message = testSignTxData();
             message += testCosignTxData();
             txtMsg.setText(message);
+            Log.i(TAG, "testCosignTxData(): message=");
+            Log.i(TAG, message);
         });
         findViewById(R.id.btn_test_crypto).setOnClickListener((view) -> {
             String message = testCrypto();
