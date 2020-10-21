@@ -82,6 +82,18 @@ Java_org_elastos_sdk_keypair_ElastosKeypairFileCoin_GetAddress(JNIEnv *jEnv, jcl
 }
 
 extern "C"
+JNIEXPORT jboolean JNICALL
+Java_org_elastos_sdk_keypair_ElastosKeypairFileCoin_IsAddressValid(JNIEnv *jEnv, jclass jType,
+                                                                   jstring jAddress)
+{
+    auto address = JniUtils::GetStringSafely(jEnv, jAddress);
+
+    bool valid = FileCoin::IsAddressValid(address.get());
+
+    return valid;
+}
+
+extern "C"
 JNIEXPORT jint JNICALL
 Java_org_elastos_sdk_keypair_ElastosKeypairFileCoin_Sign(JNIEnv *jEnv, jclass jType,
                                                          jstring jPrivateKey,

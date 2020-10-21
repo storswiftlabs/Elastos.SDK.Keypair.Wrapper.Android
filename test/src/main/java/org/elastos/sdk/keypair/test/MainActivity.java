@@ -377,6 +377,12 @@ public class MainActivity extends Activity {
         }
         message += "address: " + address + "\n";
 
+        boolean valid = ElastosKeypairFileCoin.IsAddressValid(address);
+        message += "check address: " + valid + "\n";
+
+        valid = ElastosKeypairFileCoin.IsAddressValid(address + "bad");
+        message += "check bad address: " + valid + "\n";
+
         ElastosKeypair.Data data = new ElastosKeypair.Data();
         data.buf = new byte[]{0, 1, 2, 3, 4, 5};
         ElastosKeypair.Data signedData = new ElastosKeypair.Data();

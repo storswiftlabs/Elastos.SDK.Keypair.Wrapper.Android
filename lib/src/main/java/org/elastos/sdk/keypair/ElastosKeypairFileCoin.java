@@ -11,6 +11,8 @@ public final class ElastosKeypairFileCoin extends NativeBridge {
 
     public static native String GetAddress(String publicKey);
 
+    public static native boolean IsAddressValid(String address);
+
     public static native int Sign(String privateKey, ElastosKeypair.Data data, int len,
                                   ElastosKeypair.Data signedData);
 
