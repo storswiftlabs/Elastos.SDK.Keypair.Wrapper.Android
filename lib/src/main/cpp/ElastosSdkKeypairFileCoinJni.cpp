@@ -8,6 +8,47 @@
 #include "JniUtils.hpp"
 #include "Log.hpp"
 
+void int2str(int n, char *str)
+{
+    char buf[10] = "";
+    int i = 0;
+    int len = 0;
+    int temp = n < 0 ? -n: n;  // temp为n的绝对值
+
+    if (str == NULL)
+    {
+        return;
+    }
+
+     if(n == 0){
+        str[0]= '0';
+        str[1]= 0;
+        return;
+    }
+
+    while(temp)
+    {
+        buf[i++] = (temp % 10) + '0';  //把temp的每一位上的数存入buf
+        temp = temp / 10;
+    }
+
+    len = n < 0 ? ++i: i;  //如果n是负数，则多需要一位来存储负号
+    str[i] = 0;            //末尾是结束符0
+    while(1)
+    {
+        i--;
+        if (buf[len-i-1] ==0)
+        {
+            break;
+        }
+        str[i] = buf[len-i-1];  //把buf数组里的字符拷到字符串
+    }
+    if (i == 0 )
+    {
+        str[i] = '-';          //如果是负数，添加一个负号
+    }
+}
+
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_org_elastos_sdk_keypair_ElastosKeypairFileCoin_GetSinglePrivateKey(JNIEnv *jEnv, jclass jType,
@@ -154,3 +195,47 @@ Java_org_elastos_sdk_keypair_ElastosKeypairFileCoin_GenerateRawTransaction(JNIEn
     return jRawTx.get();
 }
 
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_org_elastos_sdk_keypair_ElastosKeypairFileCoin_GetGenerateSubPrivateKey(JNIEnv *jEnv, jclass jType,
+                                                                        jobject jSeed, jint jSeedLen, jint jIndex)
+{
+    auto seed = GetDataBuffer(jEnv, jSeed);
+    int seedLen = jSeedLen;
+    int index = jIndex;
+    char address_index[64] = {0};
+    int2str(index,address_index);
+
+    char* privKey = FileCoin::GetGenerateSubPrivateKey(seed.get(), seedLen, address_index);
+    if(privKey == nullptr) {
+        return nullptr;
+    }
+
+    auto jPrivateKey = JniUtils::GetStringSafely(jEnv, privKey, false);
+    freeBuf(privKey);
+
+    return jPrivateKey.get();
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_org_elastos_sdk_keypair_ElastosKeypairFileCoin_GetGenerateSubPublicKey(JNIEnv *jEnv, jclass jType,
+                                                                       jobject jSeed, jint jSeedLen, jint jIndex)
+{
+    auto seed = GetDataBuffer(jEnv, jSeed);
+    int seedLen = jSeedLen;
+    int index = jIndex;
+    char address_index[64] = {0};
+    int2str(index,address_index);
+
+
+    char* pubKey = FileCoin::GetGenerateSubPublicKey(seed.get(), seedLen, address_index);
+    if(pubKey == nullptr) {
+        return nullptr;
+    }
+
+    auto jPublicKey = JniUtils::GetStringSafely(jEnv, pubKey, false);
+    freeBuf(pubKey);
+
+    return jPublicKey.get();
+}

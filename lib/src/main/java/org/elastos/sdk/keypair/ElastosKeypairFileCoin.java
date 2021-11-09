@@ -20,4 +20,8 @@ public final class ElastosKeypairFileCoin extends NativeBridge {
                                         ElastosKeypair.Data signedData, int signedLen);
 
     public static native String GenerateRawTransaction(String privateKey, String transaction);
+
+    public static native String GetGenerateSubPrivateKey(ElastosKeypair.Data seed, int seedLen, int index);
+
+    public static native String GetGenerateSubPublicKey(ElastosKeypair.Data seed, int seedLen, int index);
 }
