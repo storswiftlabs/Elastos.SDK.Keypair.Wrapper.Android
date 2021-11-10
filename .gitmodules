@@ -1,3 +1,4 @@
 [submodule "depends/Elastos.SDK.Keypair.C"]
 	path = depends/Elastos.SDK.Keypair.C
 	url = https://github.com/storswiftlabs/SS.Elastos.SDK.Keypair.C.git
+	branch = feat_filecoin
